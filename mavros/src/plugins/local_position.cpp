@@ -96,7 +96,7 @@ private:
 		auto baselink_angular_msg = uas->get_attitude_angular_velocity();
 		Eigen::Quaterniond enu_orientation;
 		tf::quaternionMsgToEigen(enu_orientation_msg,enu_orientation);
-		auto baselink_linear = UAS::transform_frame_enu_baselink(enu_velocity,enu_orientation.inverse());
+		// auto baselink_linear = UAS::transform_frame_enu_baselink(enu_velocity,enu_orientation.inverse());
 
 		//--------------- Generate Message Pointers ---------------//
 		auto pose = boost::make_shared<geometry_msgs::PoseStamped>();
@@ -115,7 +115,7 @@ private:
 		odom->header.stamp = pose->header.stamp;
 		odom->header.frame_id = tf_frame_id;
 		odom->child_frame_id = tf_child_frame_id;
-		tf::vectorEigenToMsg(baselink_linear,odom->twist.twist.linear);
+		tf::vectorEigenToMsg(enu_velocity,odom->twist.twist.linear);
 		odom->twist.twist.angular = baselink_angular_msg;
 		odom->pose.pose = pose->pose;
 
